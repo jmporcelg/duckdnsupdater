@@ -11,7 +11,7 @@ setup(
         "Pillow",
     ],
     entry_points={
-        "console_scripts": [
+        "gui_scripts": [
             "duckdns-updater = duckdns_updater.__init__:main",
         ],
     },
