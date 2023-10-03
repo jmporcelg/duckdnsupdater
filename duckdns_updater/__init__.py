@@ -20,7 +20,6 @@ class DuckDNSUpdater:
         self.txttoken = tk.StringVar()
         self.create_ui()
         self.load_config()
-
     def create_ui(self):
         title_label = tk.Label(self.window, text="DuckDNS IP Updater", font=("Arial", 20))
         subdomain_label = tk.Label(self.window, text="DuckDNS Subdomain:")
@@ -31,7 +30,7 @@ class DuckDNSUpdater:
         save_button = tk.Button(self.window, text="Save Config", width=20, command=self.save_config)
         load_button = tk.Button(self.window, text="Load Config", width=20, command=self.load_config)
         self.result_label = tk.Label(self.window, text="", font=("Arial", 14))
-
+        # UI layout
         title_label.grid(row=0, column=0, columnspan=2, pady=10)
         subdomain_label.grid(row=1, column=0, sticky="E", padx=10, pady=5)
         self.subdomain_entry.grid(row=1, column=1, padx=10, pady=5)
@@ -61,7 +60,6 @@ class DuckDNSUpdater:
         systray_thread.start()
         # Start the tkinter main loop
         self.window.mainloop()
-
     def load_config(self):
         try:
             with open(self.config_file, "r") as f:
@@ -77,26 +75,27 @@ class DuckDNSUpdater:
                 self.result_label.config(text="Config loaded", fg="green")
         except FileNotFoundError:
             messagebox.showinfo("Alert", "Configuration file not found. You must create one.")
-
     def save_config(self):
         self.config["subdomain"] = self.subdomain_entry.get().strip()
         self.config["token"] = self.token_entry.get().strip()
         try:
+            # Get the user's home directory
+            _home_dir = path.expanduser("~")
+            # Specify the file name and path within the home directory
+            _file_path = path.join(_home_dir, self.config_file)
             with open(self.config_file, "wb") as f:
                 f.write(f"subdomain={self.config['subdomain']}{linesep}".encode())
                 f.write(f"token={self.config['token']}".encode())
-            messagebox.showinfo("Info", "Saved the configuration to disk!")
+            messagebox.showinfo("Info", f"Saved the configuration to disk {_file_path}!")
         except Exception:
             messagebox.showinfo("Alert", "Error saving configuration to disk!")
-
     def update_duckdns(self):
         self.load_config()
         subdomain = self.config["subdomain"]
         token = self.config["token"]
         if not subdomain or not token:
             self.result_label.config(text="Need a subdomain and token.", fg="red")
-            return
-
+            return 
         try:
             response = requests.get(f"https://www.duckdns.org/update?domains={subdomain}&token={token}&ip=")
             if response.status_code == 200 and response.text == "OK":
@@ -106,30 +105,21 @@ class DuckDNSUpdater:
                 self.result_label.config(text=f"Error updating IP. Status code: {response.status_code}", fg="red")
         except requests.exceptions.RequestException as e:
             self.result_label.config(text=f"Error: {str(e)}")
-
     def update_periodically(self):
         while True:
             self.update_duckdns()
             time.sleep(1800)  # Sleep for 30 minutes (30 * 60 seconds)
-
     def run_systray(self):
         self.icon.run()
-
     def on_display(self):
         self.window.deiconify()
         self.window.lift()
-
     def on_exit(self):
         self.window.withdraw()
-
     def exit_program(self):
         self.window.destroy()  # Close the main window and terminate the program
         exit()
-
 def main():
     app = DuckDNSUpdater()
-    self.run_systray()
-    self.window.mainloop()
-
 if __name__ == "__main__":
-    main()    
+    main()
