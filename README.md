@@ -30,4 +30,4 @@ You may opt to create a virtual environment first. After installation, you will 
 
 It could be worse, if you don't care for it, don't hesitate to simply access duckdns.org via curl ;-)
 
-![Alt text](/duckdnsupdater_example.png?raw=true "Screenshot")
+![Screenshot](/duckdnsupdater_example.png?raw=true "Screenshot")
