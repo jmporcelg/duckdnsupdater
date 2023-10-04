@@ -14,9 +14,18 @@ I stumbled upon several websites with Java or C# tools, some of which did not ev
 
 ### How to install?
 
-You have several options, assuming you are on Windows but the same goes for Linux or any other OS that supports Python:
+**Using PyPI:**
 
-First option, run
+Simply run `pip install duckdns-updater==1.0.0` (for version 1).
+
+**Using source** (assuming you are on Windows, but the same goes for Linux or any other OS that supports Python):
+
+- Clone this repository.
+- Install Python https://www.python.org/downloads/ (you can use Chocolatey or get an installer from https://ninite.com/).
+
+Then you have several options:
+
+First option, open a Terminal and run
 
 `python3 setup.py install`.
 
